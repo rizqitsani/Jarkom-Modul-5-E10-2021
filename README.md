@@ -8,7 +8,8 @@
 
 ## A. Topologi
 
-![Topologi](https://user-images.githubusercontent.com/68275535/145666382-1e4365d3-9afb-458c-92e9-29756d7bab61.png)
+![Topologi](https://user-images.githubusercontent.com/65166398/145676279-bb48b454-eafb-45ff-b582-83dc149ad687.png)
+
 
 ## B. Subnetting (VLSM)
 
@@ -305,3 +306,57 @@ iface eth0 inet dhcp
 ![image](https://user-images.githubusercontent.com/68275535/145667210-bb7e08c8-2a3c-4e73-a93a-246f27b80bca.png)
 ![image](https://user-images.githubusercontent.com/68275535/145667238-5ddb5136-194f-4157-bff5-b373fb60a4b9.png)
 ![image](https://user-images.githubusercontent.com/68275535/145667241-d37b6019-c4c1-4a8b-aca5-8f11aebe56d4.png)
+
+## Soal 1
+> Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk mengkonfigurasi Foosha menggunakan iptables, tetapi Luffy tidak ingin menggunakan MASQUERADE
+
+Pada Foosha
+
+`iptables -t nat -A POSTROUTING -s 10.34.0.0/21 -o eth0 -j SNAT --to-source 192.168.122.224`
+
+Pada node lain
+
+`echo "nameserver 192.168.122.1" > /etc/resolv.conf`
+
+### Testing
+
+![image](https://user-images.githubusercontent.com/68275535/145667342-f20cf525-a3b7-452b-8b05-2154e7f18be6.png)
+
+## Soal 2
+> Kalian diminta untuk mendrop semua akses HTTP dari luar Topologi kalian pada server yang merupakan DHCP Server dan DNS Server demi menjaga keamanan
+
+Pada **Doriki** dan **Jipangu**
+
+```bash
+iptables -A FORWARD -d 10.34.7.128/29 -i eth0 -p tcp --dport 80 -j DROP
+iptables -A FORWARD -d 10.34.7.128/29 -i eth0 -p tcp --dport 443 -j ACCEPT
+```
+
+### Testing
+
+Doriki
+
+![image](https://user-images.githubusercontent.com/68275535/145667316-8c7177f4-ab5b-4518-981b-ac856cff24f9.png)
+
+Jipangu
+
+![image](https://user-images.githubusercontent.com/68275535/145667322-13328036-7d93-46ae-b1f9-54d489f430a1.png)
+
+## Soal 3
+> Karena kelompok kalian maksimal terdiri dari 3 orang. Luffy meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 3 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop
+
+Pada **Doriki** dan **Jipangu**
+
+```bash
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
+```
+
+### Testing
+
+Doriki
+
+![image](https://user-images.githubusercontent.com/68275535/145667422-b18d0c7f-20d4-4569-a57f-5e22731438e1.png)
+
+Jipangu
+
+![image](https://user-images.githubusercontent.com/68275535/145667407-b41bc498-7b6e-44d4-b3e9-5410e1e7ed27.png)
