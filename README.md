@@ -418,6 +418,9 @@ Elena
 
 ![image](https://user-images.githubusercontent.com/77628684/145677352-153e8762-fabf-4e4f-b078-e1e2c352044a.png)
 
+# Kendala
 
+- Ada kebingungan ketika setting DHCP
+- Ada kebigungan ketika setting DNS & Webserver
 
 
