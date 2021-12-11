@@ -360,3 +360,64 @@ Doriki
 Jipangu
 
 ![image](https://user-images.githubusercontent.com/68275535/145667407-b41bc498-7b6e-44d4-b3e9-5410e1e7ed27.png)
+
+## Soal 4 
+> Akses dari subnet Blueno dan Cipher hanya diperbolehkan pada pukul 07.00 - 15.00 pada hari Senin sampai Kamis.
+
+```bash
+#Blueno
+iptables -A INPUT -s 10.34.7.0/25 -m time --timestart 07:00 --timestop 15:00 --weekdays Mon,Tue,Wed,Thu -j ACCEPT
+iptables -A INPUT -s 10.34.7.0/25 -j REJECT
+
+#Cipher
+iptables -A INPUT -s 10.34.0.0/22 -m time --timestart 07:00 --timestop 15:00 --weekdays Mon,Tue,Wed,Thu -j ACCEPT
+iptables -A INPUT -s 10.34.0.0/22 -j REJECT
+```
+```bash
+Senin
+date -s "6 DEC 2021 08:00:00" -> bisa
+date -s "6 DEC 2021 18:00:00" -> gabisa
+
+Sabtu
+date -s "13 NOV 2021 09:00:00" -> gabisa
+date -s "13 NOV 2021 01:00:00" -> gabisa
+```
+
+### Testing
+Cipher
+![image](https://user-images.githubusercontent.com/77628684/145677291-2e547bf7-e46a-465c-bbb9-38b35448d6c5.png)
+Blueno
+![image](https://user-images.githubusercontent.com/77628684/145677298-43491332-7eed-4560-9aab-e5d69d5e7c7f.png)
+
+## Soal 5
+> Akses dari subnet Elena dan Fukuro hanya diperbolehkan pada pukul 15.01 hingga pukul 06.59 setiap harinya. Selain itu di reject
+
+```bash
+#  ELENA
+iptables -A INPUT -s 10.34.4.0/23 -d 10.34.7.128/29 -m time --timestart 15:01 --timestop 06:59 -j ACCEPT
+iptables -A INPUT -s 10.34.4.0/23 -j REJECT
+
+# FUKUROU
+iptables -A INPUT -s 10.34.6.0/24 -d 10.34.7.128/29 -m time --timestart 15:01 --timestop 06:59 -j ACCEPT
+iptables -A INPUT -s 10.34.6.0/24 -j REJECT
+```
+```bash
+Senin
+date -s "6 DEC 2021 15:00:00" -> gabisa
+date -s "7 DEC 2021 02:00:00" -> bisa
+```
+
+### Testing
+Fukurou
+![image](https://user-images.githubusercontent.com/77628684/145677322-8a1c038b-eb52-44c9-b5c9-8a13d19ed9ed.png)
+Elena
+![image](https://user-images.githubusercontent.com/77628684/145677325-66b0f09e-e5f0-48bb-9f04-be8a61d30dbb.png)
+
+## Soal 6
+> Karena kita memiliki 2 Web Server, Luffy ingin Guanhao disetting sehingga setiap request dari client yang mengakses DNS Server akan didistribusikan secara bergantian pada Jorge dan Maingate
+
+![image](https://user-images.githubusercontent.com/77628684/145677352-153e8762-fabf-4e4f-b078-e1e2c352044a.png)
+
+
+
+
